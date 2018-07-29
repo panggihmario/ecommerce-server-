@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+
+        <h3>Add item</h3>
+        Name: <br>
+        <input type="text" name="name" v-model="name"><br>
+        Category : <br>
+        <input type="text" v-model="category"><br>
+        Price : <br>
+        <input type="text" name ="price" v-model="price"><br>
+        Img : <br>
+        <input type="file" name="img" v-on:change="changeImage($event)"><br>
+        <input type="submit" value="submit" v-on:click="upload">
+    </div>
+    <script>
+        new Vue({
+            el : "#app",
+            data : {
+                name :'',
+                category :'',
+                price : null,
+                url : ''
+            },
+            methods : {
+                changeImage : function(data){
+                                    console.log(data)
+                                    this.url = data.target.files[0]
+      
+                },
+                upload(){
+                    let formData = new FormData()
+                    formData.append('item',this.url)
+                    axios.post('http://localhost:3000/upload',formData)
+                    .then(result=>{
+                        console.log('========',result)
+                        console.log('success')
+                        axios.post('http://localhost:3000/item/addItem',{
+                            name : this.name,
+                            category : this.category,
+                            price : this.price,
+                            url : result.data.link
+                        })
+                        .then(data=>{
+                            console.log(data)
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                    })
+                }
+            }
+        })
+    
+    
+    </script>
+
+</body>
+</html>
