@@ -18,6 +18,28 @@ class ItemController {
         })
     }
 
+    static getItem(req,res){
+        Item.find({})
+        .then(data=>{   
+            // console.log(data)
+            res.json(data)
+        })
+        
+    }
+
+    static sortItem(req,res){
+        Item.find({
+            category : req.params.category
+        })
+        .then(data=>{
+            res.json(data)
+        })
+        .catch(err=>{
+            res.json(err)
+        })
+        
+    }
+
 }
 
 module.exports = ItemController
