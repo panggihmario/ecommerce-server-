@@ -40,6 +40,27 @@ class ItemController {
         
     }
 
+    static editItem(req,res){
+        Item.updateOne({
+            _id : req.params.id
+        },{
+            name : req.body.name,
+            category : req.body.category,
+            price : req.body.price,
+        })
+        .then(function(data){
+            res.json(data)
+        })
+    }
+
+    static deleteItem(req,res){
+        Item.deleteOne({
+            _id : req.params.id
+        },function(err,data){
+            res.json(data)
+        })
+    }
+
 }
 
 module.exports = ItemController
